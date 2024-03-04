@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fi">
+  <head>
+    <h1>PUHELINLUETTELO</h1>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $('[name="submit"]').click(function () {});
+      });
+    </script>
+  </head>
+  <body>
+    <a href="/index.html">
+      <input type="button" value="Takaisin etusivulle" />
+    </a>
+    <form id="form" name="form">
+      <th>Syötä nimi:</th>
+      <td>
+        <input
+          name="nimi"
+          id="nimi"
+          type="text"
+          value=""
+          maxlength="35"
+          size="35"
+        />
+      </td>
+      <td>
+        <input
+          name="submit"
+          type="button"
+          value="Hae puhelinnumero"
+          onclick="searchNumber()"
+        />
+      </td>
+      <div>
+        <th>Numero:</th>
+        <td>
+          <input
+            name="puhelin"
+            id="puhelin"
+            type="text"
+            value=""
+            maxlength="35"
+            size="35"
+            readonly="readonly"
+          />
+        </td>
+      </div>
+    </form>
+    <script>
+      //etsii numeroa haetusta json tiedostosta
+      function searchNumber() {
+        let input = document.getElementById("nimi").value;
+        document.getElementById("puhelin").value = "";
+        input = input.toLowerCase();
+        if (input != "") {
+          $(document).ready(function () {
+            // FETCHING DATA FROM JSON FILE
+            $.getJSON(
+              "http://a41d.k.time4vps.cloud:3001/henkilot",
+              function (result) {
+                for (let i = 0; i < result.length; i++) {
+                  let obj = result[i];
+                  let name = obj.nimi.toLowerCase();
+                  if (name === input) {
+                    console.log(obj.puhelin);
+                    document.getElementById("puhelin").value = obj.puhelin;
+                  }
+                }
+              }
+            );
+          });
+        }
+      }
+    </script>
+  </body>
+</html>
